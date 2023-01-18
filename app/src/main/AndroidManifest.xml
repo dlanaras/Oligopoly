@@ -12,6 +12,21 @@
         android:theme="@style/Theme.Oligopoly"
         tools:targetApi="31">
         <activity
+            android:name=".InGameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GameSettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SessionActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".services.SessionService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
