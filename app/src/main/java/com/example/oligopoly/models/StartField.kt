@@ -1,4 +1,7 @@
 package com.example.oligopoly.models
 
-class StartField {
+import com.example.oligopoly.enums.Color
+import com.example.oligopoly.interfaces.Field
+
+class StartField(override val fieldName: String, override val color: Color = Color.None) : Field {
 }

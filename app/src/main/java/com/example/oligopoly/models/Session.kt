@@ -1,4 +1,4 @@
 package com.example.oligopoly.models
 
-class Session {
+class Session(val players: Array<Player>) {
 }
