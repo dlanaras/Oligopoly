@@ -131,11 +131,12 @@
             android:id="@+id/diceRollButton"
             android:layout_width="185dp"
             android:layout_height="31dp"
-            android:layout_weight="1"
             android:layout_gravity="center"
-            android:textColor="@color/black"
+            android:layout_weight="1"
             android:backgroundTint="#00FFA3"
-            android:text="Roll Dice" />
+            android:onClick="rollDice"
+            android:text="Roll Dice"
+            android:textColor="@color/black" />
 
     </LinearLayout>
 

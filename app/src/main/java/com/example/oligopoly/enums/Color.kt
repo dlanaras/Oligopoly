@@ -9,5 +9,6 @@ enum class Color {
     Green,
     Red,
     Blue,
-    None
+    None,
+    Black
 }

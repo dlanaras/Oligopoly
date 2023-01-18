@@ -18,4 +18,8 @@ class SessionService : Service() {
     public fun getSession(): Session {
         TODO("Implement this")
     }
+
+    public fun discardSession() {
+        TODO("Not yet implemented")
+    }
 }
