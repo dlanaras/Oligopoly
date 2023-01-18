@@ -12,12 +12,15 @@
         android:theme="@style/Theme.Oligopoly"
         tools:targetApi="31">
         <activity
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:name=".InGameActivity"
             android:exported="false" />
         <activity
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:name=".GameSettingsActivity"
             android:exported="false" />
         <activity
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:name=".SessionActivity"
             android:exported="false" />
 
@@ -27,6 +30,7 @@
             android:exported="true" />
 
         <activity
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
