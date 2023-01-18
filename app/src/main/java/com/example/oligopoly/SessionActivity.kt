@@ -12,6 +12,9 @@ class SessionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_session)
+
+        resumeButton = findViewById(R.id.resumeButton)
+        discardButton = findViewById(R.id.discardButton)
     }
 
     public fun discardSessionAndNavigateToMainActivity() {

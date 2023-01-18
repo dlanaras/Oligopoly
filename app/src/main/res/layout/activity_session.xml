@@ -4,6 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E5E5E5"
     tools:context=".SessionActivity">
 
+    <Button
+        android:id="@+id/resumeButton"
+        android:layout_width="360dp"
+        android:layout_height="68dp"
+        android:layout_marginStart="185dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="186dp"
+        android:layout_marginBottom="41dp"
+        android:backgroundTint="#00FFA3"
+        android:text="Resume"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/discardButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/discardButton"
+        android:layout_width="219dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="258dp"
+        android:layout_marginTop="41dp"
+        android:layout_marginEnd="254dp"
+        android:layout_marginBottom="128dp"
+        android:backgroundTint="#FF4A4A"
+        android:text="Discard"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/resumeButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
