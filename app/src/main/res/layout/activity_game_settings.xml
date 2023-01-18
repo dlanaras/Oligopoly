@@ -4,6 +4,214 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E5E5E5"
     tools:context=".GameSettingsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/p2NameB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Person 2 name: " />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/personDNameInput"
+                        android:layout_width="119dp"
+                        android:layout_height="47dp"
+                        android:hint="..." />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/p1NameB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="19dp"
+                        android:text="Person 1 name: " />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/personCNameInput"
+                        android:layout_width="119dp"
+                        android:layout_height="47dp"
+                        android:hint="..." />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/teamBName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Team 2 name:" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/teamBNameInput"
+                        android:layout_width="119dp"
+                        android:layout_height="47dp"
+                        android:hint="..." />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/teamAName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Team 1 name: " />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/teamANameInput"
+                        android:layout_width="119dp"
+                        android:layout_height="47dp"
+                        android:hint="..." />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/p1nameA"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Person 1 name: " />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/personANameInput"
+                        android:layout_width="119dp"
+                        android:layout_height="47dp"
+                        android:hint="..." />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/p2NameA"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Person 2 name: " />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/personBNameInput"
+                        android:layout_width="119dp"
+                        android:layout_height="47dp"
+                        android:hint="..." />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/startingBalance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Starting Balance" />
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/startingBalanceInput"
+                            android:layout_width="188dp"
+                            android:layout_height="40dp"
+                            android:hint="..." />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom">
+
+                <Button
+                    android:id="@+id/backButton"
+                    android:layout_width="147dp"
+                    android:layout_height="49dp"
+                    android:backgroundTint="#FF4A4A"
+                    android:text="Back"
+                    android:textColor="@color/black" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/startButton"
+                    android:layout_width="148dp"
+                    android:layout_height="47dp"
+                    android:backgroundTint="#00FFA3"
+                    android:text="Start"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.example.oligopoly
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -20,5 +21,16 @@ class GameSettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_settings)
+
+        startButton = findViewById(R.id.startButton)
+        backButton = findViewById(R.id.backButton)
+
+        startButton.setOnClickListener() {
+            startActivity(Intent(this, InGameActivity::class.java))
+        }
+
+        backButton.setOnClickListener() {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 }
