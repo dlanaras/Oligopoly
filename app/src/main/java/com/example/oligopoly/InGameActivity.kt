@@ -1,22 +1,25 @@
 package com.example.oligopoly
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.Service
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.*
+import android.content.pm.PackageManager
+import android.os.*
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.Handler
-import android.os.IBinder
-import android.os.Looper
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.example.oligopoly.enums.Chance
 import com.example.oligopoly.enums.Color
 import com.example.oligopoly.enums.CommunityChest
 import com.example.oligopoly.services.SessionService
 import com.example.oligopoly.interfaces.Field
 import com.example.oligopoly.models.*
-import kotlin.time.Duration
 
 class InGameActivity : AppCompatActivity() {
     private var mBound = false
@@ -42,7 +45,6 @@ class InGameActivity : AppCompatActivity() {
     private lateinit var playerBPositionText: TextView
     private lateinit var playerCPositionText: TextView
     private lateinit var playerDPositionText: TextView
-    //TODO: Add Dialog for buying properties
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
@@ -214,15 +216,14 @@ class InGameActivity : AppCompatActivity() {
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     public fun rollDice() {
         val firstDice = getRandomDiceRoll()
         val secondDice = getRandomDiceRoll()
-
         // TODO play bad animation of dice rolling (use one of 6 dice animations twice based on rolled number)
 
         movePlayerBy(firstDice + secondDice)
         handleActionOnLandedField()
-
         changeTurn()
     }
 
@@ -281,6 +282,7 @@ class InGameActivity : AppCompatActivity() {
         return true
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     private fun transferBalance(from: Team, to: Team, amount: Int) {
         from.balance -= amount
@@ -297,6 +299,7 @@ class InGameActivity : AppCompatActivity() {
         to.balanceTextView!!.text = "${to.balance}$"
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     private fun subtractBalance(from: Team, amount: Int) {
         from.balance -= amount
@@ -305,14 +308,16 @@ class InGameActivity : AppCompatActivity() {
         declareBankruptcyIfTeamIsBankrupt(from)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun declareBankruptcyIfTeamIsBankrupt(t: Team) {
         if (t.balance < 0) {
-            handleBankruptcy()
+            handleBankruptcy(t)
         }
     }
 
-    private fun handleBankruptcy() {
-        sendGameResultNotification()
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun handleBankruptcy(loserTeam: Team) {
+        sendGameResultNotification(loserTeam, getOtherTeam(loserTeam))
         sessionService.discardSession()
         startActivity(Intent(this, MainActivity::class.java))
     }
@@ -338,15 +343,16 @@ class InGameActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun handleActionOnLandedField() {
         if (currentPlayer.position is Property) {
             val currentProperty = currentPlayer.position as Property
 
             if (currentProperty.isPurchased) {
-                if (isPropertyASet(currentProperty, getOtherTeam())) {
-                    transferBalance(currentPlayer.team, getOtherTeam(), currentProperty.setFee)
+                if (isPropertyASet(currentProperty, getOtherTeam(currentPlayer.team))) {
+                    transferBalance(currentPlayer.team, getOtherTeam(currentPlayer.team), currentProperty.setFee)
                 } else {
-                    transferBalance(currentPlayer.team, getOtherTeam(), currentProperty.fee)
+                    transferBalance(currentPlayer.team, getOtherTeam(currentPlayer.team), currentProperty.fee)
                 }
             } else {
                 if (currentPlayer.team.balance >= currentProperty.cost) {
@@ -366,6 +372,7 @@ class InGameActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun executeChance(c: ChanceField) {
         var chanceExplanation = ""
 
@@ -382,7 +389,7 @@ class InGameActivity : AppCompatActivity() {
             }
             Chance.StealOneHundred -> {
                 chanceExplanation = "Steal 100$ from the other team."
-                transferBalance(getOtherTeam(), currentPlayer.team, 100)
+                transferBalance(getOtherTeam(currentPlayer.team), currentPlayer.team, 100)
             }
             Chance.ThreeSpacesBack -> {
                 chanceExplanation = "Travel three spaces backwards."
@@ -393,6 +400,7 @@ class InGameActivity : AppCompatActivity() {
         showChanceDialog(chanceExplanation)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun executeCommunityChest(cc: CommunityChestField) {
         var communityChestExplanation = ""
 
@@ -403,7 +411,7 @@ class InGameActivity : AppCompatActivity() {
             }
             CommunityChest.PayFifty -> {
                 communityChestExplanation = "You pay 50$ to the other team."
-                transferBalance(currentPlayer.team, getOtherTeam(), 50)
+                transferBalance(currentPlayer.team, getOtherTeam(currentPlayer.team), 50)
             }
             CommunityChest.EarnTwoHundred -> {
                 communityChestExplanation = "You earn 200$."
@@ -411,13 +419,13 @@ class InGameActivity : AppCompatActivity() {
             }
             CommunityChest.PayTwoHundred -> {
                 communityChestExplanation = "You pay 200$ to the other team."
-                transferBalance(currentPlayer.team, getOtherTeam(), 200)
+                transferBalance(currentPlayer.team, getOtherTeam(currentPlayer.team), 200)
             }
             CommunityChest.PayTwentyForEveryProperty -> {
                 communityChestExplanation = "You pay 20$ for every property you own."
                 transferBalance(
                     currentPlayer.team,
-                    getOtherTeam(),
+                    getOtherTeam(currentPlayer.team),
                     currentPlayer.team.ownedProperties.size * 20
                 )
             }
@@ -430,8 +438,27 @@ class InGameActivity : AppCompatActivity() {
         return currentIndex - lastIndex < 0
     }
 
-    private fun sendGameResultNotification() {
-        TODO("implement this")
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun sendGameResultNotification(loserTeam: Team, winnerTeam: Team) {
+        val notificationChannel = NotificationChannel("Oligopoly", "Oligopoly", NotificationManager.IMPORTANCE_DEFAULT)
+
+        val builder = NotificationCompat.Builder(this, notificationChannel.id)
+            .setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle("Oligopoly Game Results")
+            .setContentText("Team ${loserTeam.name} went bankrupt. Which means team ${winnerTeam.name} won!")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        with(NotificationManagerCompat.from(this)) {
+            // notificationId is a unique int for each notification that you must define
+            if (ActivityCompat.checkSelfPermission(
+                    this@InGameActivity,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+            notify(1, builder.build())
+        }
     }
 
     private fun changeTurn() {
@@ -444,7 +471,7 @@ class InGameActivity : AppCompatActivity() {
         }
     }
 
-    private fun getOtherTeam(): Team {
-        return players.find { p -> p.team != currentPlayer.team }!!.team
+    private fun getOtherTeam(team: Team): Team {
+        return players.find { p -> p.team != team }!!.team
     }
 }
