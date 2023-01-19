@@ -1,9 +1,14 @@
 package com.example.oligopoly
 
 import android.annotation.SuppressLint
+import android.app.Service
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.IBinder
 import android.widget.TextView
 import com.example.oligopoly.enums.Chance
 import com.example.oligopoly.enums.Color
@@ -13,6 +18,8 @@ import com.example.oligopoly.interfaces.Field
 import com.example.oligopoly.models.*
 
 class InGameActivity : AppCompatActivity() {
+    private var mBound = false
+
     private lateinit var sessionService: SessionService
     private lateinit var board: Array<Field>
     private lateinit var currentPlayer: Player
@@ -35,9 +42,27 @@ class InGameActivity : AppCompatActivity() {
     private lateinit var playerDPositionText: TextView
     //TODO: Add Dialog for buying properties
 
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+            val binder = service as SessionService.LocalBinder
+            sessionService = binder.getService()
+            mBound = true
+        }
+
+        override fun onServiceDisconnected(arg0: ComponentName) {
+            mBound = false
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_in_game)
+
+        Intent(this, SessionService::class.java).also { intent ->
+            startService(intent)
+            bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        }
+
         // TODO: set players from GameSettingsActivity
         initGame()
     }
