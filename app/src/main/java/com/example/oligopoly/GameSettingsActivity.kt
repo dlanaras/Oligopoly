@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import com.example.oligopoly.models.Player
 
 class GameSettingsActivity : AppCompatActivity() {
     private lateinit var teamANameInput: EditText
@@ -22,15 +21,50 @@ class GameSettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_settings)
 
+        teamANameInput = findViewById(R.id.teamANameInput)
+        teamBNameInput = findViewById(R.id.teamBNameInput)
+        playerANameInput = findViewById(R.id.personANameInput)
+        playerBNameInput = findViewById(R.id.personBNameInput)
+        playerCNameInput = findViewById(R.id.personCNameInput)
+        playerDNameInput = findViewById(R.id.personDNameInput)
+        startingBalanceInput = findViewById(R.id.startingBalance)
+
         startButton = findViewById(R.id.startButton)
         backButton = findViewById(R.id.backButton)
+        val bundle = Bundle()
+
 
         startButton.setOnClickListener() {
-            startActivity(Intent(this, InGameActivity::class.java))
+            if(inputsAreValid()) {
+                bundle.putString("playerA", playerANameInput.text.toString())
+                bundle.putString("playerB", playerBNameInput.text.toString())
+                bundle.putString("playerC", playerCNameInput.text.toString())
+                bundle.putString("playerD", playerDNameInput.text.toString())
+                bundle.putString("teamA", teamANameInput.text.toString())
+                bundle.putString("teamB", teamBNameInput.text.toString())
+                bundle.putInt("startingBalance", startingBalanceInput.text.toString().toInt())
+
+                val startIntent = Intent(this, InGameActivity::class.java)
+                startIntent.putExtras(bundle)
+
+                startActivity(startIntent)
+            }
         }
 
         backButton.setOnClickListener() {
             startActivity(Intent(this, MainActivity::class.java))
         }
+    }
+
+    private fun inputsAreValid() : Boolean {
+        val stringInputs = arrayOf(teamANameInput, teamBNameInput, playerANameInput, playerBNameInput, playerCNameInput, playerDNameInput)
+
+        stringInputs.forEach { input ->
+            if(input.text.isEmpty() || input.text.length > 16) {
+                return false
+            }
+        }
+
+        return (startingBalanceInput.text.isNotEmpty() && startingBalanceInput.text.toString().toInt() <= 1000000)
     }
 }

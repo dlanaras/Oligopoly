@@ -67,15 +67,48 @@ class InGameActivity : AppCompatActivity() {
             bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
 
+        initGame()
+        setPlayers()
+
         mainHandler.post(object : Runnable {
             override fun run() {
                 sessionService.saveSession(Session(players))
                 mainHandler.postDelayed(this, 30000)
             }
         })
+    }
 
-        // TODO: set players from GameSettingsActivity
-        initGame()
+    private fun setPlayers() {
+        val startingBalance = intent.getIntExtra("startingBalance", 0)
+        val teamA = Team(startingBalance, intent.getStringExtra("teamA")!!, ArrayList(), teamABalanceText, teamAPropertiesText)
+        val teamB = Team(startingBalance, intent.getStringExtra("teamB")!!, ArrayList(), teamBBalanceText, teamBPropertiesText)
+        teamANameText.text = teamA.name
+        teamBNameText.text = teamB.name
+
+        players[0].name = intent.getStringExtra("playerA")!!
+        players[0].team = teamA
+        players[0].position = board[0]
+        players[0].positionTextView = playerAPositionText
+
+        players[1].name = intent.getStringExtra("playerB")!!
+        players[1].team = teamA
+        players[1].position = board[0]
+        players[1].positionTextView = playerBPositionText
+
+        players[2].name = intent.getStringExtra("playerC")!!
+        players[2].team = teamB
+        players[2].position = board[0]
+        players[2].positionTextView = playerCPositionText
+
+        players[3].name = intent.getStringExtra("playerD")!!
+        players[3].team = teamB
+        players[3].position = board[0]
+        players[3].positionTextView = playerDPositionText
+
+        playerANameText.text = players[0].name
+        playerBNameText.text = players[1].name
+        playerCNameText.text = players[2].name
+        playerDNameText.text = players[3].name
     }
 
     override fun onStop() {
@@ -217,7 +250,7 @@ class InGameActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    public fun rollDice() {
+    fun rollDice() {
         val firstDice = getRandomDiceRoll()
         val secondDice = getRandomDiceRoll()
         // TODO play bad animation of dice rolling (use one of 6 dice animations twice based on rolled number)
