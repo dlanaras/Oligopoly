@@ -8,23 +8,25 @@ import android.app.NotificationManager
 import android.content.*
 import android.content.pm.PackageManager
 import android.os.*
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.oligopoly.enums.Chance
 import com.example.oligopoly.enums.Color
 import com.example.oligopoly.enums.CommunityChest
-import com.example.oligopoly.services.SessionService
 import com.example.oligopoly.interfaces.Field
 import com.example.oligopoly.models.*
+import com.example.oligopoly.services.SessionService
 
 class InGameActivity : AppCompatActivity() {
     private var mBound = false
     private val mainHandler = Handler(Looper.getMainLooper())
 
+    //private lateinit var runnable: Runnable
     private lateinit var sessionService: SessionService
     private lateinit var board: Array<Field>
     private lateinit var currentPlayer: Player
@@ -67,59 +69,137 @@ class InGameActivity : AppCompatActivity() {
             bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
 
-        initGame()
-        setPlayers()
+        teamABalanceText = findViewById(R.id.teamABalanceText)
+        teamBBalanceText = findViewById(R.id.teamBBalanceText)
+        teamAPropertiesText = findViewById(R.id.teamAPropertiesText)
+        teamBPropertiesText = findViewById(R.id.teamBPropertiesText)
+        teamANameText = findViewById(R.id.teamANameText)
+        teamBNameText = findViewById(R.id.teamBNameText)
+        playerANameText = findViewById(R.id.playerANameText)
+        playerBNameText = findViewById(R.id.playerBNameText)
+        playerCNameText = findViewById(R.id.playerCNameText)
+        playerDNameText = findViewById(R.id.playerDNameText)
+        playerAPositionText = findViewById(R.id.playerAPositionText)
+        playerBPositionText = findViewById(R.id.playerBPositionText)
+        playerCPositionText = findViewById(R.id.playerCPositionText)
+        playerDPositionText = findViewById(R.id.playerDPositionText)
 
-        mainHandler.post(object : Runnable {
-            override fun run() {
-                sessionService.saveSession(Session(players))
-                mainHandler.postDelayed(this, 30000)
-            }
-        })
+        initGame()
+
+        if(intent.getBooleanExtra("resumeGame", false)) {
+            setPlayersFromSession(sessionService.getSession())
+        } else {
+            initPlayers()
+        }
     }
 
-    private fun setPlayers() {
+    private fun playerDtosToPlayerArray(playerDtos: Array<PlayerDto>): Array<Player> {
+        val ps = ArrayList<Player>()
+
+        playerDtos.forEach { playerDto ->
+            ps.add(PlayerDto.toPlayer(playerDto))
+        }
+
+        return arrayOf(ps[0], ps[1], ps[2], ps[3])
+    }
+
+    private fun playersToPlayerDtoArray(): Array<PlayerDto> {
+        val ps = ArrayList<PlayerDto>()
+
+        players.forEach { player ->
+            ps.add(PlayerDto.toPlayerDto(player))
+        }
+
+        return arrayOf(ps[0], ps[1], ps[2], ps[3])
+    }
+
+    private fun setPlayersFromSession(session: Session) {
+        players = playerDtosToPlayerArray(session.players)
+
+        val playerA = players[0]
+        val playerB = players[1]
+        val playerC = players[2]
+        val playerD = players[3]
+
+        val teamA = playerA.team
+        val teamB = playerC.team
+
+        teamANameText.text = teamA.name
+        teamBNameText.text = teamB.name
+        teamABalanceText.text = teamA.balance.toString()
+        teamBBalanceText.text = teamB.balance.toString()
+
+        playerANameText.text = playerA.name
+        playerBNameText.text = playerB.name
+        playerCNameText.text = playerC.name
+        playerDNameText.text = playerD.name
+
+        playerAPositionText.text = playerA.position.fieldName
+        playerBPositionText.text = playerB.position.fieldName
+        playerCPositionText.text = playerC.position.fieldName
+        playerDPositionText.text = playerD.position.fieldName
+
+        currentPlayer = PlayerDto.toPlayer(session.currentPlayer)
+    }
+
+    private fun initPlayers() {
         val startingBalance = intent.getIntExtra("startingBalance", 0)
         val teamA = Team(startingBalance, intent.getStringExtra("teamA")!!, ArrayList(), teamABalanceText, teamAPropertiesText)
         val teamB = Team(startingBalance, intent.getStringExtra("teamB")!!, ArrayList(), teamBBalanceText, teamBPropertiesText)
         teamANameText.text = teamA.name
         teamBNameText.text = teamB.name
+        teamABalanceText.text = teamA.balance.toString()
+        teamBBalanceText.text = teamB.balance.toString()
 
-        players[0].name = intent.getStringExtra("playerA")!!
-        players[0].team = teamA
-        players[0].position = board[0]
-        players[0].positionTextView = playerAPositionText
+        val playerA = Player(intent.getStringExtra("playerA")!!, board[0], teamA, playerAPositionText)
+        val playerB = Player(intent.getStringExtra("playerB")!!, board[0], teamA, playerBPositionText)
+        val playerC = Player(intent.getStringExtra("playerC")!!, board[0], teamB, playerCPositionText)
+        val playerD = Player(intent.getStringExtra("playerD")!!, board[0], teamB, playerDPositionText)
 
-        players[1].name = intent.getStringExtra("playerB")!!
-        players[1].team = teamA
-        players[1].position = board[0]
-        players[1].positionTextView = playerBPositionText
+        players = arrayOf(playerA, playerB, playerC, playerD)
 
-        players[2].name = intent.getStringExtra("playerC")!!
-        players[2].team = teamB
-        players[2].position = board[0]
-        players[2].positionTextView = playerCPositionText
+        playerANameText.text = playerA.name
+        playerBNameText.text = playerB.name
+        playerCNameText.text = playerC.name
+        playerDNameText.text = playerD.name
 
-        players[3].name = intent.getStringExtra("playerD")!!
-        players[3].team = teamB
-        players[3].position = board[0]
-        players[3].positionTextView = playerDPositionText
+        playerAPositionText.text = playerA.position.fieldName
+        playerBPositionText.text = playerB.position.fieldName
+        playerCPositionText.text = playerC.position.fieldName
+        playerDPositionText.text = playerD.position.fieldName
 
-        playerANameText.text = players[0].name
-        playerBNameText.text = players[1].name
-        playerCNameText.text = players[2].name
-        playerDNameText.text = players[3].name
+        currentPlayer = playerA
     }
 
     override fun onStop() {
-        sessionService.saveSession(Session(players)) // Session class is currently useless, but could eventually contain more values
+        sessionService.saveSession(Session(playersToPlayerDtoArray(), PlayerDto.toPlayerDto(currentPlayer))) // Session class is currently useless, but could eventually contain more values
         super.onStop()
     }
 
+    override fun onRestart() {
+        val session = sessionService.getSession()
+        players = playerDtosToPlayerArray(session.players)
+        currentPlayer = PlayerDto.toPlayer(session.currentPlayer)
+        super.onRestart()
+    }
+
     override fun onPause() {
-        sessionService.saveSession(Session(players))
+//        mainHandler.removeCallbacks(runnable)
+//        sessionService.saveSession(Session(players, currentPlayer))
         super.onPause()
     }
+
+    /*override fun onResume() {
+        mainHandler.post(object : Runnable {
+            override fun run() {
+                runnable = this
+                sessionService.saveSession(Session(players))
+                mainHandler.postDelayed(this, 30000)
+            }
+        })
+
+        super.onResume()
+    }*/
 
     private fun initGame() {
         val startField = StartField("STA")
@@ -250,7 +330,7 @@ class InGameActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun rollDice() {
+    fun rollDice(view: View) {
         val firstDice = getRandomDiceRoll()
         val secondDice = getRandomDiceRoll()
         // TODO play bad animation of dice rolling (use one of 6 dice animations twice based on rolled number)
@@ -260,6 +340,7 @@ class InGameActivity : AppCompatActivity() {
         changeTurn()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun promptPropertyPurchase(p: Property) {
         val alertDialog: AlertDialog = this.let {
             val builder = AlertDialog.Builder(it)
@@ -267,6 +348,8 @@ class InGameActivity : AppCompatActivity() {
                 setPositiveButton(
                     "Buy"
                 ) { _, _ ->
+                    addPropertyToCurrentTeam(p)
+                    subtractBalance(currentPlayer.team, p.cost)
                     addPropertyToCurrentTeam(p)
                 }
                 setNegativeButton(
@@ -307,7 +390,7 @@ class InGameActivity : AppCompatActivity() {
         val propertySet = propertySets.find { properties -> properties.contains(p) }
 
         propertySet!!.forEach {
-            if (!it.isPurchased || it.ownedBy != otherTeam) {
+            if (!it.isPurchased || it.ownedBy != otherTeam.name) {
                 return false
             }
         }
@@ -358,7 +441,7 @@ class InGameActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun addPropertyToCurrentTeam(p: Property) {
         currentPlayer.team.ownedProperties.add(p)
-        p.purchase(currentPlayer.team)
+        p.purchase(currentPlayer.team.name)
         val newPropertyText = if (currentPlayer.team.propertiesTextView!!.text.toString()
                 .isEmpty()
         ) p.fieldName else ", ${p.fieldName}"
@@ -367,13 +450,23 @@ class InGameActivity : AppCompatActivity() {
     }
 
     private fun movePlayerBy(by: Int) {
-        val boardIndexOfNewLocation = board.indexOf(currentPlayer.position) + by
+        //TODO: show a color above position based on current position
+
+        val goesAboveMaxIndex = board.indexOf(currentPlayer.position) + by > board.size - 1
+        val aboveMaxNewIndex = board.indexOf(currentPlayer.position) + by - board.size
+        val normalNewIndex = board.indexOf(currentPlayer.position) + by
+
+        var boardIndexOfNewLocation = 0
+
+        if (goesAboveMaxIndex) {
+            boardIndexOfNewLocation = aboveMaxNewIndex
+            addBalance(currentPlayer.team, 200)
+        } else {
+            boardIndexOfNewLocation = normalNewIndex
+        }
+
         currentPlayer.position = board[boardIndexOfNewLocation]
         currentPlayer.positionTextView!!.text = currentPlayer.position.fieldName
-
-        if (wasStartFieldPassed(boardIndexOfNewLocation, by)) {
-            addBalance(currentPlayer.team, 200)
-        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -390,12 +483,6 @@ class InGameActivity : AppCompatActivity() {
             } else {
                 if (currentPlayer.team.balance >= currentProperty.cost) {
                     promptPropertyPurchase(currentProperty)
-                    val userWantsToBuy = true
-
-                    if (userWantsToBuy) {
-                        subtractBalance(currentPlayer.team, currentProperty.cost)
-                        addPropertyToCurrentTeam(currentProperty)
-                    }
                 }
             }
         } else if (currentPlayer.position is ChanceField) {
@@ -413,7 +500,7 @@ class InGameActivity : AppCompatActivity() {
             Chance.GoToStart -> {
                 chanceExplanation = "Go to start."
                 val currentPlayerIndex = board.indexOf(currentPlayer.position)
-                val spacesFromStart = 40 - currentPlayerIndex
+                val spacesFromStart = 39 - currentPlayerIndex
                 movePlayerBy(spacesFromStart)
             }
             Chance.ThreeSpacesForward -> {
@@ -465,10 +552,6 @@ class InGameActivity : AppCompatActivity() {
         }
 
         showCommunityChestDialog(communityChestExplanation)
-    }
-
-    private fun wasStartFieldPassed(lastIndex: Int, currentIndex: Int): Boolean {
-        return currentIndex - lastIndex < 0
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

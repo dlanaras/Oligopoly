@@ -26,7 +26,7 @@
             android:exported="false" />
 
         <service
-            android:name=".services.SessionService"
+            android:name="com.example.oligopoly.services.SessionService"
             android:enabled="true"
             android:exported="true" />
 

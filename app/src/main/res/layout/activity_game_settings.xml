@@ -28,13 +28,13 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/p2NameB"
+                        android:id="@+id/teamAName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Person 2 name: " />
+                        android:text="Team 1 name: " />
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/personDNameInput"
+                        android:id="@+id/teamANameInput"
                         android:layout_width="119dp"
                         android:layout_height="47dp"
                         android:hint="..." />
@@ -64,17 +64,16 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/teamBName"
+                        android:id="@+id/p2NameB"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Team 2 name:" />
+                        android:text="Person 2 name: " />
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/teamBNameInput"
+                        android:id="@+id/personDNameInput"
                         android:layout_width="119dp"
                         android:layout_height="47dp"
                         android:hint="..." />
-
                 </LinearLayout>
 
             </LinearLayout>
@@ -91,16 +90,17 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/teamAName"
+                        android:id="@+id/teamBName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Team 1 name: " />
+                        android:text="Team 2 name:" />
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/teamANameInput"
+                        android:id="@+id/teamBNameInput"
                         android:layout_width="119dp"
                         android:layout_height="47dp"
                         android:hint="..." />
+
                 </LinearLayout>
 
                 <LinearLayout

@@ -27,7 +27,7 @@ class GameSettingsActivity : AppCompatActivity() {
         playerBNameInput = findViewById(R.id.personBNameInput)
         playerCNameInput = findViewById(R.id.personCNameInput)
         playerDNameInput = findViewById(R.id.personDNameInput)
-        startingBalanceInput = findViewById(R.id.startingBalance)
+        startingBalanceInput = findViewById(R.id.startingBalanceInput)
 
         startButton = findViewById(R.id.startButton)
         backButton = findViewById(R.id.backButton)

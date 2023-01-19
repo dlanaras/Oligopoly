@@ -28,43 +28,64 @@
                     android:id="@+id/teamANameText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    />
 
                 <TextView
                     android:id="@+id/playerANameText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    />
 
                 <TextView
                     android:id="@+id/playerAPositionText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    />
 
                 <TextView
                     android:id="@+id/playerBNameText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    />
+
+                <TextView
+                    android:id="@+id/playerBPositionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    />
 
                 <TextView
                     android:id="@+id/teamABalanceText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp" />
 
                 <TextView
                     android:id="@+id/teamAPropertyText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Properties:" />
+                    android:text="Properties:"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp" />
 
                 <TextView
                     android:id="@+id/teamAPropertiesText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                     />
 
             </LinearLayout>
 
@@ -85,43 +106,65 @@
                     android:id="@+id/teamBNameText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    />
 
                 <TextView
                     android:id="@+id/playerCNameText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    />
 
                 <TextView
                     android:id="@+id/playerCPositionText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    />
 
                 <TextView
                     android:id="@+id/playerDNameText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    />
 
                 <TextView
                     android:id="@+id/playerDPositionText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    />
+
+                <TextView
+                    android:id="@+id/teamBBalanceText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    />
 
                 <TextView
                     android:id="@+id/teamBPropertyText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Properties" />
+                    android:text="Properties"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp" />
 
                 <TextView
                     android:id="@+id/teamBPropertiesText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                     />
 
             </LinearLayout>
 

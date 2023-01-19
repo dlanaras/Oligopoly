@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import com.example.oligopoly.models.Session
+import com.example.oligopoly.models.format
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -25,13 +26,13 @@ class SessionService : Service() {
 
     public fun saveSession(session: Session) {
         this.openFileOutput(fileName, Context.MODE_PRIVATE).use {
-            it.write(Json.encodeToString(session).toByteArray())
+            it.write(format.encodeToString(session).toByteArray())
         }
     }
 
     public fun getSession(): Session {
         this.openFileInput(fileName).use {
-            return Json.decodeFromString(it.readBytes().toString())
+            return format.decodeFromString(it.readBytes().toString())
         }
     }
 
