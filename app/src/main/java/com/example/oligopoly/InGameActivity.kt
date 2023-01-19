@@ -8,7 +8,9 @@ import android.content.Intent
 import android.content.ServiceConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.widget.TextView
 import com.example.oligopoly.enums.Chance
 import com.example.oligopoly.enums.Color
@@ -16,9 +18,11 @@ import com.example.oligopoly.enums.CommunityChest
 import com.example.oligopoly.services.SessionService
 import com.example.oligopoly.interfaces.Field
 import com.example.oligopoly.models.*
+import kotlin.time.Duration
 
 class InGameActivity : AppCompatActivity() {
     private var mBound = false
+    private val mainHandler = Handler(Looper.getMainLooper())
 
     private lateinit var sessionService: SessionService
     private lateinit var board: Array<Field>
@@ -62,6 +66,13 @@ class InGameActivity : AppCompatActivity() {
             startService(intent)
             bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
+
+        mainHandler.post(object : Runnable {
+            override fun run() {
+                sessionService.saveSession(Session(players))
+                mainHandler.postDelayed(this, 30000)
+            }
+        })
 
         // TODO: set players from GameSettingsActivity
         initGame()
@@ -204,8 +215,6 @@ class InGameActivity : AppCompatActivity() {
             trainPropertySet
         )
     }
-
-    //TODO: add function to save session every 30s
 
     public fun rollDice() {
         val firstDice = getRandomDiceRoll()
