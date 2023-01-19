@@ -1,11 +1,9 @@
 package com.example.oligopoly
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.Service
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -228,8 +226,43 @@ class InGameActivity : AppCompatActivity() {
         changeTurn()
     }
 
-    private fun promptPropertyPurchase() {
-        TODO("implement this")
+    private fun promptPropertyPurchase(p: Property) {
+        val alertDialog: AlertDialog = this.let {
+            val builder = AlertDialog.Builder(it)
+            builder.apply {
+                setPositiveButton(
+                    "Buy"
+                ) { _, _ ->
+                    addPropertyToCurrentTeam(p)
+                }
+                setNegativeButton(
+                    "Don't"
+                ) { _, _ -> } // Do nothing
+            }
+
+            builder.setMessage("Want to purchase ${p.fieldName} for ${p.cost}?")
+                .setTitle("Property Purchase")
+
+            builder.create()
+        }
+
+        alertDialog.show()
+    }
+
+    private fun showCommunityChestDialog(message: String) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+
+        builder.setMessage(message).setTitle("Community Chest")
+
+        builder.create().show()
+    }
+
+    private fun showChanceDialog(message: String) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+
+        builder.setMessage(message).setTitle("Chance")
+
+        builder.create().show()
     }
 
     private fun getRandomDiceRoll(): Int {
@@ -273,7 +306,7 @@ class InGameActivity : AppCompatActivity() {
     }
 
     private fun declareBankruptcyIfTeamIsBankrupt(t: Team) {
-        if(t.balance < 0) {
+        if (t.balance < 0) {
             handleBankruptcy()
         }
     }
@@ -317,7 +350,7 @@ class InGameActivity : AppCompatActivity() {
                 }
             } else {
                 if (currentPlayer.team.balance >= currentProperty.cost) {
-                    //TODO: Prompt user to buy or not with dialog (promptPropertyPurchase)
+                    promptPropertyPurchase(currentProperty)
                     val userWantsToBuy = true
 
                     if (userWantsToBuy) {
@@ -334,28 +367,63 @@ class InGameActivity : AppCompatActivity() {
     }
 
     private fun executeChance(c: ChanceField) {
+        var chanceExplanation = ""
+
         when (c.getRandomChance()) {
-            Chance.GoToStart -> currentPlayer.position = board[0]
-            Chance.ThreeSpacesForward -> movePlayerBy(3)
-            Chance.StealOneHundred -> transferBalance(getOtherTeam(), currentPlayer.team, 100)
-            Chance.ThreeSpacesBack -> movePlayerBy(-3)
+            Chance.GoToStart -> {
+                chanceExplanation = "Go to start."
+                val currentPlayerIndex = board.indexOf(currentPlayer.position)
+                val spacesFromStart = 40 - currentPlayerIndex
+                movePlayerBy(spacesFromStart)
+            }
+            Chance.ThreeSpacesForward -> {
+                chanceExplanation = "Travel three spaces forwards."
+                movePlayerBy(3)
+            }
+            Chance.StealOneHundred -> {
+                chanceExplanation = "Steal 100$ from the other team."
+                transferBalance(getOtherTeam(), currentPlayer.team, 100)
+            }
+            Chance.ThreeSpacesBack -> {
+                chanceExplanation = "Travel three spaces backwards."
+                movePlayerBy(-3)
+            }
         }
-        //TODO: Add dialog showing what they got
+
+        showChanceDialog(chanceExplanation)
     }
 
     private fun executeCommunityChest(cc: CommunityChestField) {
+        var communityChestExplanation = ""
+
         when (cc.getRandomCommunityChestField()) {
-            CommunityChest.EarnFifty -> addBalance(currentPlayer.team, 50)
-            CommunityChest.PayFifty -> transferBalance(currentPlayer.team, getOtherTeam(), 50)
-            CommunityChest.EarnTwoHundred -> addBalance(currentPlayer.team, 200)
-            CommunityChest.PayTwoHundred -> transferBalance(currentPlayer.team, getOtherTeam(), 200)
-            CommunityChest.PayTwentyForEveryProperty -> transferBalance(
-                currentPlayer.team,
-                getOtherTeam(),
-                currentPlayer.team.ownedProperties.size * 20
-            )
+            CommunityChest.EarnFifty -> {
+                communityChestExplanation = "You earn 50$."
+                addBalance(currentPlayer.team, 50)
+            }
+            CommunityChest.PayFifty -> {
+                communityChestExplanation = "You pay 50$ to the other team."
+                transferBalance(currentPlayer.team, getOtherTeam(), 50)
+            }
+            CommunityChest.EarnTwoHundred -> {
+                communityChestExplanation = "You earn 200$."
+                addBalance(currentPlayer.team, 200)
+            }
+            CommunityChest.PayTwoHundred -> {
+                communityChestExplanation = "You pay 200$ to the other team."
+                transferBalance(currentPlayer.team, getOtherTeam(), 200)
+            }
+            CommunityChest.PayTwentyForEveryProperty -> {
+                communityChestExplanation = "You pay 20$ for every property you own."
+                transferBalance(
+                    currentPlayer.team,
+                    getOtherTeam(),
+                    currentPlayer.team.ownedProperties.size * 20
+                )
+            }
         }
-        // TODO: Add dialog showing what they got
+
+        showCommunityChestDialog(communityChestExplanation)
     }
 
     private fun wasStartFieldPassed(lastIndex: Int, currentIndex: Int): Boolean {
