@@ -7,8 +7,10 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.*
 import android.content.pm.PackageManager
+import android.graphics.drawable.AnimationDrawable
 import android.os.*
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +23,8 @@ import com.example.oligopoly.enums.CommunityChest
 import com.example.oligopoly.interfaces.Field
 import com.example.oligopoly.models.*
 import com.example.oligopoly.services.SessionService
+import java.util.*
+import kotlin.collections.ArrayList
 
 class InGameActivity : AppCompatActivity() {
     private var isPurchasing: Boolean = false
@@ -405,16 +409,38 @@ class InGameActivity : AppCompatActivity() {
     @Suppress("UNUSED_PARAMETER")
     @RequiresApi(Build.VERSION_CODES.O)
     fun rollDice(view: View) {
+        val animationDurationInMillis: Long = 1000
         val firstDice = getRandomDiceRoll()
         val secondDice = getRandomDiceRoll()
-        // TODO play bad animation of dice rolling (use one of 6 dice animations twice based on rolled number)
+        val firstDiceImg = findViewById<View>(R.id.dice1) as ImageView
+        val secondDiceImg = findViewById<View>(R.id.dice2) as ImageView
 
-        movePlayerBy(firstDice + secondDice)
-        handleActionOnLandedField()
+        playDiceAnimation(firstDice, firstDiceImg)
+        playDiceAnimation(secondDice, secondDiceImg)
 
-        if (!isPurchasing) { // race condition problems arise when waiting for user to choose an option in the property purchase dialog. so this is needed
-            changeTurn()
+        // wait for dice animation to finish
+        mainHandler.postDelayed({
+            movePlayerBy(firstDice + secondDice)
+            handleActionOnLandedField()
+
+            if (!isPurchasing) { // race condition problems arise when waiting for user to choose an option in the property purchase dialog. so this is needed
+                changeTurn()
+            }
+        }, animationDurationInMillis)
+    }
+
+    private fun playDiceAnimation(roll: Int, img: ImageView) {
+        when (roll) {
+            1 -> img.setBackgroundResource(R.drawable.diceroll1)
+            2 -> img.setBackgroundResource(R.drawable.diceroll2)
+            3 -> img.setBackgroundResource(R.drawable.diceroll3)
+            4 -> img.setBackgroundResource(R.drawable.diceroll4)
+            5 -> img.setBackgroundResource(R.drawable.diceroll5)
+            6 -> img.setBackgroundResource(R.drawable.diceroll6)
         }
+
+        val frameAnimation = img.background as AnimationDrawable
+        frameAnimation.start()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

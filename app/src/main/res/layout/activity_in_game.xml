@@ -15,7 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="9"
+            android:layout_weight="1"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -29,40 +29,35 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    />
+                    android:layout_marginEnd="20dp" />
 
                 <TextView
                     android:id="@+id/playerANameText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    />
+                    android:layout_marginEnd="20dp" />
 
                 <TextView
                     android:id="@+id/playerAPositionText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    />
+                    android:layout_marginEnd="20dp" />
 
                 <TextView
                     android:id="@+id/playerBNameText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    />
+                    android:layout_marginEnd="20dp" />
 
                 <TextView
                     android:id="@+id/playerBPositionText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    />
+                    android:layout_marginEnd="20dp" />
 
                 <TextView
                     android:id="@+id/teamABalanceText"
@@ -75,24 +70,44 @@
                     android:id="@+id/teamAPropertyText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Properties:"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp" />
+                    android:layout_marginEnd="20dp"
+                    android:text="Properties:" />
 
                 <TextView
                     android:id="@+id/teamAPropertiesText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                     />
+                    android:layout_marginEnd="20dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/dice1"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <ImageView
+                        android:id="@+id/dice2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/board"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="459dp"
+                android:layout_height="331dp"
                 android:layout_weight="1"
                 tools:srcCompat="@tools:sample/avatars" />
 
@@ -107,64 +122,57 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    />
+                    android:layout_marginEnd="20dp" />
 
                 <TextView
                     android:id="@+id/playerCNameText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    />
+                    android:layout_marginEnd="20dp" />
 
                 <TextView
                     android:id="@+id/playerCPositionText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    />
+                    android:layout_marginEnd="20dp" />
 
                 <TextView
                     android:id="@+id/playerDNameText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    />
+                    android:layout_marginEnd="20dp" />
 
                 <TextView
                     android:id="@+id/playerDPositionText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    />
+                    android:layout_marginEnd="20dp" />
 
                 <TextView
                     android:id="@+id/teamBBalanceText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    />
+                    android:layout_marginEnd="20dp" />
 
                 <TextView
                     android:id="@+id/teamBPropertyText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Properties"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp" />
+                    android:layout_marginEnd="20dp"
+                    android:text="Properties" />
 
                 <TextView
                     android:id="@+id/teamBPropertiesText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                     />
+                    android:layout_marginEnd="20dp" />
 
             </LinearLayout>
 
@@ -173,9 +181,8 @@
         <Button
             android:id="@+id/diceRollButton"
             android:layout_width="185dp"
-            android:layout_height="31dp"
+            android:layout_height="36dp"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:backgroundTint="#00FFA3"
             android:onClick="rollDice"
             android:text="Roll Dice"

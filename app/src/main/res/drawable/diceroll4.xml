@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="true">
+    <item
+        android:drawable="@drawable/_151"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_152"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_153"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_154"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_155"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_156"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_157"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_158"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_159"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_160"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_161"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_162"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_163"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_164"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_165"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_166"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_167"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_168"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_169"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_170"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_171"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_172"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_173"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_174"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_175"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_176"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_177"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_178"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_179"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_180"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_181"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_182"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_183"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_184"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_185"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_186"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_187"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_188"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_189"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_190"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_191"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_192"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_193"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_194"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_195"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_196"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_197"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_198"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_199"
+        android:duration="4" />
+    <item
+        android:drawable="@drawable/_200"
+        android:duration="4" />
+</animation-list>
