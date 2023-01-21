@@ -9,7 +9,6 @@ import com.example.oligopoly.models.Session
 import com.example.oligopoly.models.format
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import java.io.File
 
 class SessionService : Service() {
@@ -24,19 +23,23 @@ class SessionService : Service() {
         return binder
     }
 
-    public fun saveSession(session: Session) {
+    fun saveSession(session: Session) {
         this.openFileOutput(fileName, Context.MODE_PRIVATE).use {
             it.write(format.encodeToString(session).toByteArray())
         }
     }
 
-    public fun getSession(): Session {
-        this.openFileInput(fileName).use {
-            return format.decodeFromString(it.readBytes().toString())
-        }
+    fun getSession(): Session {
+        val fileContents = this.openFileInput(fileName).bufferedReader().use { it.readText() }
+        return format.decodeFromString(fileContents)
     }
 
-    public fun discardSession() {
+    fun discardSession() {
         this.deleteFile(fileName)
+    }
+
+    // TODO: use in main activity to check when to navigate to sessionActivity
+    fun sessionExists() : Boolean {
+        return File(fileName).exists()
     }
 }

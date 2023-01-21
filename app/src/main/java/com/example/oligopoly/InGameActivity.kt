@@ -24,7 +24,7 @@ import com.example.oligopoly.services.SessionService
 
 class InGameActivity : AppCompatActivity() {
     private var mBound = false
-    private val mainHandler = Handler(Looper.getMainLooper())
+    //private val mainHandler = Handler(Looper.getMainLooper())
 
     //private lateinit var runnable: Runnable
     private lateinit var sessionService: SessionService
@@ -86,7 +86,7 @@ class InGameActivity : AppCompatActivity() {
 
         initGame()
 
-        if(intent.getBooleanExtra("resumeGame", false)) {
+        if (intent.getBooleanExtra("resumeGame", false)) {
             setPlayersFromSession(sessionService.getSession())
         } else {
             initPlayers()
@@ -99,6 +99,8 @@ class InGameActivity : AppCompatActivity() {
         playerDtos.forEach { playerDto ->
             ps.add(PlayerDto.toPlayer(playerDto))
         }
+
+        ps[0].positionTextView
 
         return arrayOf(ps[0], ps[1], ps[2], ps[3])
     }
@@ -116,18 +118,29 @@ class InGameActivity : AppCompatActivity() {
     private fun setPlayersFromSession(session: Session) {
         players = playerDtosToPlayerArray(session.players)
 
+        players[0].positionTextView = playerAPositionText
+        players[1].positionTextView = playerBPositionText
+        players[2].positionTextView = playerCPositionText
+        players[3].positionTextView = playerDPositionText
+
+        players[0].team.balanceTextView = teamABalanceText
+        players[0].team.propertiesTextView = teamAPropertiesText
+        players[1].team.balanceTextView = teamABalanceText
+        players[1].team.propertiesTextView = teamAPropertiesText
+        players[2].team.balanceTextView = teamBBalanceText
+        players[2].team.propertiesTextView = teamBPropertiesText
+        players[3].team.balanceTextView = teamBBalanceText
+        players[3].team.propertiesTextView = teamBPropertiesText
+
+        teamANameText.text = players[0].team.name
+        teamBNameText.text = players[2].name
+        teamABalanceText.text = players[0].team.balance.toString()
+        teamBBalanceText.text = players[2].team.balance.toString()
+
         val playerA = players[0]
         val playerB = players[1]
         val playerC = players[2]
         val playerD = players[3]
-
-        val teamA = playerA.team
-        val teamB = playerC.team
-
-        teamANameText.text = teamA.name
-        teamBNameText.text = teamB.name
-        teamABalanceText.text = teamA.balance.toString()
-        teamBBalanceText.text = teamB.balance.toString()
 
         playerANameText.text = playerA.name
         playerBNameText.text = playerB.name
@@ -139,22 +152,42 @@ class InGameActivity : AppCompatActivity() {
         playerCPositionText.text = playerC.position.fieldName
         playerDPositionText.text = playerD.position.fieldName
 
-        currentPlayer = PlayerDto.toPlayer(session.currentPlayer)
+        val currPlayer = PlayerDto.toPlayer(session.currentPlayer)
+
+        currentPlayer = players.find { p ->
+            p.name == currPlayer.name
+        }!!
     }
 
     private fun initPlayers() {
         val startingBalance = intent.getIntExtra("startingBalance", 0)
-        val teamA = Team(startingBalance, intent.getStringExtra("teamA")!!, ArrayList(), teamABalanceText, teamAPropertiesText)
-        val teamB = Team(startingBalance, intent.getStringExtra("teamB")!!, ArrayList(), teamBBalanceText, teamBPropertiesText)
+        val teamA = Team(
+            startingBalance,
+            intent.getStringExtra("teamA")!!,
+            ArrayList(),
+            teamABalanceText,
+            teamAPropertiesText
+        )
+        val teamB = Team(
+            startingBalance,
+            intent.getStringExtra("teamB")!!,
+            ArrayList(),
+            teamBBalanceText,
+            teamBPropertiesText
+        )
         teamANameText.text = teamA.name
         teamBNameText.text = teamB.name
         teamABalanceText.text = teamA.balance.toString()
         teamBBalanceText.text = teamB.balance.toString()
 
-        val playerA = Player(intent.getStringExtra("playerA")!!, board[0], teamA, playerAPositionText)
-        val playerB = Player(intent.getStringExtra("playerB")!!, board[0], teamA, playerBPositionText)
-        val playerC = Player(intent.getStringExtra("playerC")!!, board[0], teamB, playerCPositionText)
-        val playerD = Player(intent.getStringExtra("playerD")!!, board[0], teamB, playerDPositionText)
+        val playerA =
+            Player(intent.getStringExtra("playerA")!!, board[0], teamA, playerAPositionText)
+        val playerB =
+            Player(intent.getStringExtra("playerB")!!, board[0], teamA, playerBPositionText)
+        val playerC =
+            Player(intent.getStringExtra("playerC")!!, board[0], teamB, playerCPositionText)
+        val playerD =
+            Player(intent.getStringExtra("playerD")!!, board[0], teamB, playerDPositionText)
 
         players = arrayOf(playerA, playerB, playerC, playerD)
 
@@ -172,34 +205,29 @@ class InGameActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
-        sessionService.saveSession(Session(playersToPlayerDtoArray(), PlayerDto.toPlayerDto(currentPlayer))) // Session class is currently useless, but could eventually contain more values
+        sessionService.saveSession(
+            Session(
+                playersToPlayerDtoArray(), PlayerDto.toPlayerDto(currentPlayer)
+            )
+        ) // Session class is currently useless, but could eventually contain more values
         super.onStop()
     }
 
     override fun onRestart() {
         val session = sessionService.getSession()
-        players = playerDtosToPlayerArray(session.players)
-        currentPlayer = PlayerDto.toPlayer(session.currentPlayer)
+        setPlayersFromSession(session)
         super.onRestart()
     }
 
-    override fun onPause() {
 //        mainHandler.removeCallbacks(runnable)
 //        sessionService.saveSession(Session(players, currentPlayer))
-        super.onPause()
+/*mainHandler.post(object : Runnable {
+    override fun run() {
+        runnable = this
+        sessionService.saveSession(Session(players))
+        mainHandler.postDelayed(this, 30000)
     }
-
-    /*override fun onResume() {
-        mainHandler.post(object : Runnable {
-            override fun run() {
-                runnable = this
-                sessionService.saveSession(Session(players))
-                mainHandler.postDelayed(this, 30000)
-            }
-        })
-
-        super.onResume()
-    }*/
+})*/
 
     private fun initGame() {
         val startField = StartField("STA")
@@ -211,10 +239,10 @@ class InGameActivity : AppCompatActivity() {
         val fourthDoNothingField = DoNothingField("DON4")
         val fifthDoNothingField = DoNothingField("DON5")
 
-        val firstChance = StartField("CHA1")
-        val secondChance = StartField("CHA2")
-        val thirdChance = StartField("CHA3")
-        val fourthChance = StartField("CHA4")
+        val firstChance = ChanceField("CHA1")
+        val secondChance = ChanceField("CHA2")
+        val thirdChance = ChanceField("CHA3")
+        val fourthChance = ChanceField("CHA4")
         // water and electricity replaced with chance and community chest
         val firstCommunityChest = CommunityChestField("COM1")
         val secondCommunityChest = CommunityChestField("COM2")
@@ -267,10 +295,7 @@ class InGameActivity : AppCompatActivity() {
         val thirdTrainProperty = Property("TRA3", Color.Black, false, null, 200, 50, 300)
         val fourthTrainProperty = Property("TRA4", Color.Black, false, null, 200, 50, 300)
         val trainPropertySet = arrayOf(
-            firstTrainProperty,
-            secondTrainProperty,
-            thirdTrainProperty,
-            fourthTrainProperty
+            firstTrainProperty, secondTrainProperty, thirdTrainProperty, fourthTrainProperty
         )
 
         board = arrayOf(
@@ -329,8 +354,10 @@ class InGameActivity : AppCompatActivity() {
         )
     }
 
+    @Suppress("UNUSED_PARAMETER")
     @RequiresApi(Build.VERSION_CODES.O)
     fun rollDice(view: View) {
+        println(currentPlayer.name)
         val firstDice = getRandomDiceRoll()
         val secondDice = getRandomDiceRoll()
         // TODO play bad animation of dice rolling (use one of 6 dice animations twice based on rolled number)
@@ -350,14 +377,13 @@ class InGameActivity : AppCompatActivity() {
                 ) { _, _ ->
                     addPropertyToCurrentTeam(p)
                     subtractBalance(currentPlayer.team, p.cost)
-                    addPropertyToCurrentTeam(p)
                 }
                 setNegativeButton(
                     "Don't"
                 ) { _, _ -> } // Do nothing
             }
 
-            builder.setMessage("Want to purchase ${p.fieldName} for ${p.cost}?")
+            builder.setMessage("${currentPlayer.name} want to purchase ${p.fieldName} for ${p.cost}?")
                 .setTitle("Property Purchase")
 
             builder.create()
@@ -369,7 +395,7 @@ class InGameActivity : AppCompatActivity() {
     private fun showCommunityChestDialog(message: String) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
 
-        builder.setMessage(message).setTitle("Community Chest")
+        builder.setMessage(message).setTitle("Community Chest for ${currentPlayer.name}")
 
         builder.create().show()
     }
@@ -377,7 +403,7 @@ class InGameActivity : AppCompatActivity() {
     private fun showChanceDialog(message: String) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
 
-        builder.setMessage(message).setTitle("Chance")
+        builder.setMessage(message).setTitle("Chance for ${currentPlayer.name}")
 
         builder.create().show()
     }
@@ -440,13 +466,17 @@ class InGameActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun addPropertyToCurrentTeam(p: Property) {
-        currentPlayer.team.ownedProperties.add(p)
         p.purchase(currentPlayer.team.name)
-        val newPropertyText = if (currentPlayer.team.propertiesTextView!!.text.toString()
-                .isEmpty()
-        ) p.fieldName else ", ${p.fieldName}"
+        val newPropertyText =
+            if (currentPlayer.team.propertiesTextView!!.text.toString().isEmpty()) {
+                p.fieldName
+            } else {
+                ", ${p.fieldName}"
+            }
+
         currentPlayer.team.propertiesTextView!!.text =
             currentPlayer.team.propertiesTextView!!.text.toString() + newPropertyText
+        currentPlayer.team.ownedProperties.add(p)
     }
 
     private fun movePlayerBy(by: Int) {
@@ -456,7 +486,7 @@ class InGameActivity : AppCompatActivity() {
         val aboveMaxNewIndex = board.indexOf(currentPlayer.position) + by - board.size
         val normalNewIndex = board.indexOf(currentPlayer.position) + by
 
-        var boardIndexOfNewLocation = 0
+        val boardIndexOfNewLocation: Int
 
         if (goesAboveMaxIndex) {
             boardIndexOfNewLocation = aboveMaxNewIndex
@@ -476,9 +506,13 @@ class InGameActivity : AppCompatActivity() {
 
             if (currentProperty.isPurchased) {
                 if (isPropertyASet(currentProperty, getOtherTeam(currentPlayer.team))) {
-                    transferBalance(currentPlayer.team, getOtherTeam(currentPlayer.team), currentProperty.setFee)
+                    transferBalance(
+                        currentPlayer.team, getOtherTeam(currentPlayer.team), currentProperty.setFee
+                    )
                 } else {
-                    transferBalance(currentPlayer.team, getOtherTeam(currentPlayer.team), currentProperty.fee)
+                    transferBalance(
+                        currentPlayer.team, getOtherTeam(currentPlayer.team), currentProperty.fee
+                    )
                 }
             } else {
                 if (currentPlayer.team.balance >= currentProperty.cost) {
@@ -500,7 +534,7 @@ class InGameActivity : AppCompatActivity() {
             Chance.GoToStart -> {
                 chanceExplanation = "Go to start."
                 val currentPlayerIndex = board.indexOf(currentPlayer.position)
-                val spacesFromStart = 39 - currentPlayerIndex
+                val spacesFromStart = 40 - currentPlayerIndex
                 movePlayerBy(spacesFromStart)
             }
             Chance.ThreeSpacesForward -> {
@@ -556,19 +590,18 @@ class InGameActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun sendGameResultNotification(loserTeam: Team, winnerTeam: Team) {
-        val notificationChannel = NotificationChannel("Oligopoly", "Oligopoly", NotificationManager.IMPORTANCE_DEFAULT)
+        val notificationChannel =
+            NotificationChannel("Oligopoly", "Oligopoly", NotificationManager.IMPORTANCE_DEFAULT)
 
         val builder = NotificationCompat.Builder(this, notificationChannel.id)
-            .setSmallIcon(R.drawable.notification_icon)
-            .setContentTitle("Oligopoly Game Results")
+            .setSmallIcon(R.drawable.notification_icon).setContentTitle("Oligopoly Game Results")
             .setContentText("Team ${loserTeam.name} went bankrupt. Which means team ${winnerTeam.name} won!")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         with(NotificationManagerCompat.from(this)) {
             // notificationId is a unique int for each notification that you must define
             if (ActivityCompat.checkSelfPermission(
-                    this@InGameActivity,
-                    Manifest.permission.POST_NOTIFICATIONS
+                    this@InGameActivity, Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 return

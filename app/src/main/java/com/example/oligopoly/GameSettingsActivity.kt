@@ -57,12 +57,16 @@ class GameSettingsActivity : AppCompatActivity() {
     }
 
     private fun inputsAreValid() : Boolean {
-        val stringInputs = arrayOf(teamANameInput, teamBNameInput, playerANameInput, playerBNameInput, playerCNameInput, playerDNameInput)
+        val stringInputs = listOf(teamANameInput, teamBNameInput, playerANameInput, playerBNameInput, playerCNameInput, playerDNameInput)
 
         stringInputs.forEach { input ->
             if(input.text.isEmpty() || input.text.length > 16) {
                 return false
             }
+        }
+
+        if(stringInputs.groupBy { it.text }.size != stringInputs.size) { // values are not unique
+            return false
         }
 
         return (startingBalanceInput.text.isNotEmpty() && startingBalanceInput.text.toString().toInt() <= 1000000)

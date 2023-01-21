@@ -1,7 +1,5 @@
 package com.example.oligopoly.models
 
-import kotlinx.serialization.SerialName
-
 @kotlinx.serialization.Serializable
 class TeamDto(val balance: Int, val name: String, val ownedProperties: ArrayList<PropertyDto>) {
     companion object {
