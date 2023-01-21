@@ -9,7 +9,7 @@ import com.example.oligopoly.models.Session
 import com.example.oligopoly.models.format
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
-import java.io.File
+import java.io.FileNotFoundException
 
 class SessionService : Service() {
     private val fileName = "oligopoly_session"
@@ -29,17 +29,21 @@ class SessionService : Service() {
         }
     }
 
-    fun getSession(): Session {
-        val fileContents = this.openFileInput(fileName).bufferedReader().use { it.readText() }
-        return format.decodeFromString(fileContents)
+    fun getSession(): Session? {
+        return try {
+            val fileContents = this.openFileInput(fileName).bufferedReader().use { it.readText() }
+            format.decodeFromString(fileContents)
+        } catch (e: FileNotFoundException) {
+            println("File does not exist")
+            null
+        }
     }
 
     fun discardSession() {
         this.deleteFile(fileName)
     }
 
-    // TODO: use in main activity to check when to navigate to sessionActivity
     fun sessionExists() : Boolean {
-        return File(fileName).exists()
+        return getSession() != null
     }
 }
