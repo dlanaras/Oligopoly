@@ -45,6 +45,11 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp" />
 
+                <View
+                    android:id="@+id/playerAPositionColor"
+                    android:layout_width="30dp"
+                    android:layout_height="10dp" />
+
                 <TextView
                     android:id="@+id/playerBNameText"
                     android:layout_width="match_parent"
@@ -58,6 +63,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp" />
+
+                <View
+                    android:id="@+id/playerBPositionColor"
+                    android:layout_width="30dp"
+                    android:layout_height="10dp" />
 
                 <TextView
                     android:id="@+id/teamABalanceText"
@@ -138,6 +148,12 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp" />
 
+                <View
+                    android:id="@+id/playerCPositionColor"
+                    android:layout_gravity="start"
+                    android:layout_width="30dp"
+                    android:layout_height="10dp" />
+
                 <TextView
                     android:id="@+id/playerDNameText"
                     android:layout_width="match_parent"
@@ -151,6 +167,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp" />
+
+                <View
+                    android:id="@+id/playerDPositionColor"
+                    android:layout_gravity="start"
+                    android:layout_width="30dp"
+                    android:layout_height="10dp" />
 
                 <TextView
                     android:id="@+id/teamBBalanceText"

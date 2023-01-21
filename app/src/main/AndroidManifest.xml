@@ -15,6 +15,7 @@
         <activity
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:name=".InGameActivity"
+            android:screenOrientation="landscape"
             android:exported="false" />
         <activity
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"

@@ -54,6 +54,11 @@ class InGameActivity : AppCompatActivity() {
     private lateinit var playerBPositionText: TextView
     private lateinit var playerCPositionText: TextView
     private lateinit var playerDPositionText: TextView
+    private lateinit var playerAPositionColor: View
+    private lateinit var playerBPositionColor: View
+    private lateinit var playerCPositionColor: View
+    private lateinit var playerDPositionColor: View
+
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
@@ -107,6 +112,10 @@ class InGameActivity : AppCompatActivity() {
         playerBPositionText = findViewById(R.id.playerBPositionText)
         playerCPositionText = findViewById(R.id.playerCPositionText)
         playerDPositionText = findViewById(R.id.playerDPositionText)
+        playerAPositionColor = findViewById(R.id.playerAPositionColor)
+        playerBPositionColor = findViewById(R.id.playerBPositionColor)
+        playerCPositionColor = findViewById(R.id.playerCPositionColor)
+        playerDPositionColor = findViewById(R.id.playerDPositionColor)
 
         initGame()
 
@@ -152,6 +161,11 @@ class InGameActivity : AppCompatActivity() {
         playerC.positionTextView = playerCPositionText
         playerD.positionTextView = playerDPositionText
 
+        playerA.positionColorView = playerAPositionColor
+        playerB.positionColorView = playerBPositionColor
+        playerC.positionColorView = playerCPositionColor
+        playerD.positionColorView = playerDPositionColor
+
         playerD.team.balanceTextView = teamBBalanceText
         playerD.team.propertiesTextView = teamBPropertiesText
         playerC.team.balanceTextView = teamBBalanceText
@@ -188,6 +202,11 @@ class InGameActivity : AppCompatActivity() {
         playerBPositionText.text = playerB.position.fieldName
         playerCPositionText.text = playerC.position.fieldName
         playerDPositionText.text = playerD.position.fieldName
+
+        playerAPositionColor.setBackgroundColor(getColorValueFromColorEnum(playerA.position.color))
+        playerBPositionColor.setBackgroundColor(getColorValueFromColorEnum(playerB.position.color))
+        playerCPositionColor.setBackgroundColor(getColorValueFromColorEnum(playerC.position.color))
+        playerDPositionColor.setBackgroundColor(getColorValueFromColorEnum(playerD.position.color))
 
         val currPlayer = PlayerDto.toPlayer(session.currentPlayer)
 
@@ -232,13 +251,13 @@ class InGameActivity : AppCompatActivity() {
         teamBBalanceText.text = teamB.balance.toString()
 
         val playerA =
-            Player(intent.getStringExtra("playerA")!!, board[0], teamA, playerAPositionText)
+            Player(intent.getStringExtra("playerA")!!, board[0], teamA, playerAPositionText, playerAPositionColor)
         val playerB =
-            Player(intent.getStringExtra("playerB")!!, board[0], teamA, playerBPositionText)
+            Player(intent.getStringExtra("playerB")!!, board[0], teamA, playerBPositionText, playerBPositionColor)
         val playerC =
-            Player(intent.getStringExtra("playerC")!!, board[0], teamB, playerCPositionText)
+            Player(intent.getStringExtra("playerC")!!, board[0], teamB, playerCPositionText, playerCPositionColor)
         val playerD =
-            Player(intent.getStringExtra("playerD")!!, board[0], teamB, playerDPositionText)
+            Player(intent.getStringExtra("playerD")!!, board[0], teamB, playerDPositionText, playerDPositionColor)
 
         players = arrayOf(playerA, playerB, playerC, playerD)
 
@@ -251,6 +270,12 @@ class InGameActivity : AppCompatActivity() {
         playerBPositionText.text = playerB.position.fieldName
         playerCPositionText.text = playerC.position.fieldName
         playerDPositionText.text = playerD.position.fieldName
+
+        val startingColor = getColorValueFromColorEnum(Color.None)
+        playerAPositionColor.setBackgroundColor(startingColor)
+        playerBPositionColor.setBackgroundColor(startingColor)
+        playerCPositionColor.setBackgroundColor(startingColor)
+        playerDPositionColor.setBackgroundColor(startingColor)
 
         currentPlayer = playerA
     }
@@ -443,6 +468,23 @@ class InGameActivity : AppCompatActivity() {
         frameAnimation.start()
     }
 
+    private fun getColorValueFromColorEnum(color: Color): Int {
+        val colorHex = when(color) {
+            Color.Black -> "#000000"
+            Color.Brown -> "#644117"
+            Color.Cyan -> "#a4f4f9"
+            Color.Magenta -> "#bd33a4"
+            Color.Orange -> "#ffa500"
+            Color.Yellow -> "#f0e130"
+            Color.Green -> "#3cd070"
+            Color.Red -> "#e62020"
+            Color.Blue -> "#4166f5"
+            Color.None -> "#a9a9a9"
+        }
+
+        return android.graphics.Color.parseColor(colorHex)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun promptPropertyPurchaseAndChangeTurn(p: Property) {
         val alertDialog: AlertDialog = this.let {
@@ -560,8 +602,6 @@ class InGameActivity : AppCompatActivity() {
     }
 
     private fun movePlayerBy(by: Int) {
-        //TODO: show a color above position based on current position
-
         val goesAboveMaxIndex = board.indexOf(currentPlayer.position) + by > board.size - 1
         val aboveMaxNewIndex = board.indexOf(currentPlayer.position) + by - board.size
         val normalNewIndex = board.indexOf(currentPlayer.position) + by
@@ -577,6 +617,7 @@ class InGameActivity : AppCompatActivity() {
 
         currentPlayer.position = board[boardIndexOfNewLocation]
         currentPlayer.positionTextView!!.text = currentPlayer.position.fieldName
+        currentPlayer.positionColorView!!.setBackgroundColor(getColorValueFromColorEnum(currentPlayer.position.color))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
