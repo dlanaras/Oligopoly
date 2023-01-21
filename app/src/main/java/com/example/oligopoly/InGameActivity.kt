@@ -659,7 +659,7 @@ class InGameActivity : AppCompatActivity() {
         notificationManager.createNotificationChannel(notificationChannel)
 
         val builder = NotificationCompat.Builder(this, notificationChannel.id)
-            .setSmallIcon(R.drawable.notification_icon)
+            .setSmallIcon(R.drawable.notification_icon_oligopoly)
             .setContentTitle("Oligopoly Game Results")
             .setContentText("Team ${loserTeam.name} went bankrupt. Which means team ${winnerTeam.name} won!")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
