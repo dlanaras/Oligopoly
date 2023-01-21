@@ -26,9 +26,9 @@ class InGameActivity : AppCompatActivity() {
     private var isPurchasing: Boolean = false
     private var resumeGame = false
     private var mBound = false
-    //private val mainHandler = Handler(Looper.getMainLooper())
+    private val mainHandler = Handler(Looper.getMainLooper())
 
-    //private lateinit var runnable: Runnable
+    private lateinit var runnable: Runnable
     private lateinit var sessionService: SessionService
     private lateinit var board: Array<Field>
     private lateinit var currentPlayer: Player
@@ -57,9 +57,22 @@ class InGameActivity : AppCompatActivity() {
             sessionService = binder.getService()
             mBound = true
 
-            if(resumeGame) {
+            if (resumeGame) {
                 setPlayersFromSession(sessionService.getSession()!!)
             }
+
+            mainHandler.post(object : Runnable {
+                override fun run() {
+                    runnable = this
+                    sessionService.saveSession(
+                        Session(
+                            playersToPlayerDtoArray(),
+                            PlayerDto.toPlayerDto(currentPlayer)
+                        )
+                    )
+                    mainHandler.postDelayed(this, 30000)
+                }
+            })
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
@@ -124,7 +137,7 @@ class InGameActivity : AppCompatActivity() {
 
     private fun setPlayersFromSession(session: Session) {
         players = playerDtosToPlayerArray(session.players)
-        //TODO: refactor team a and team b names
+
         val playerA = players[0]
         val playerB = players[1]
         val playerC = players[2]
@@ -135,22 +148,31 @@ class InGameActivity : AppCompatActivity() {
         playerC.positionTextView = playerCPositionText
         playerD.positionTextView = playerDPositionText
 
-        playerC.team.balanceTextView = teamABalanceText
-        playerC.team.propertiesTextView = teamAPropertiesText
-        playerA.team.balanceTextView = teamBBalanceText
-        playerA.team.propertiesTextView = teamBPropertiesText
+        playerD.team.balanceTextView = teamBBalanceText
+        playerD.team.propertiesTextView = teamBPropertiesText
+        playerC.team.balanceTextView = teamBBalanceText
+        playerC.team.propertiesTextView = teamBPropertiesText
+        playerB.team.balanceTextView = teamABalanceText
+        playerB.team.propertiesTextView = teamAPropertiesText
+        playerA.team.balanceTextView = teamABalanceText
+        playerA.team.propertiesTextView = teamAPropertiesText
 
         teamANameText.text = playerA.team.name
         teamBNameText.text = playerC.team.name
         teamABalanceText.text = playerA.team.balance.toString()
         teamBBalanceText.text = playerC.team.balance.toString()
 
-        playerA.team.ownedProperties.forEach {p ->
-            addPropertyToTeam(p, playerA.team)
-        }
+        val teamAOwnedPropertyNames = playerA.team.ownedProperties.map { it.fieldName }
+        val teamBOwnedPropertyNames = playerC.team.ownedProperties.map { it.fieldName }
 
-        playerC.team.ownedProperties.forEach {p ->
-            addPropertyToTeam(p, playerC.team)
+        board.forEach { f ->
+            if (f is Property) {
+                if(teamAOwnedPropertyNames.contains(f.fieldName)) {
+                    addPropertyToTeamAfterResumingSession(f, playerA.team)
+                } else if (teamBOwnedPropertyNames.contains(f.fieldName)) {
+                    addPropertyToTeamAfterResumingSession(f, playerC.team)
+                }
+            }
         }
 
         playerANameText.text = playerA.name
@@ -168,6 +190,20 @@ class InGameActivity : AppCompatActivity() {
         currentPlayer = players.find { p ->
             p.name == currPlayer.name
         }!!
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun addPropertyToTeamAfterResumingSession(p: Property, t: Team) {
+        p.purchase(t.name)
+        val newPropertyText =
+            if (t.propertiesTextView!!.text.toString().isEmpty()) {
+                p.fieldName
+            } else {
+                ", ${p.fieldName}"
+            }
+
+        t.propertiesTextView!!.text =
+            t.propertiesTextView!!.text.toString() + newPropertyText
     }
 
     private fun initPlayers() {
@@ -216,12 +252,23 @@ class InGameActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
+        mainHandler.removeCallbacks(runnable)
         sessionService.saveSession(
             Session(
                 playersToPlayerDtoArray(), PlayerDto.toPlayerDto(currentPlayer)
             )
-        ) // Session class is currently useless, but could eventually contain more values
+        )
         super.onStop()
+    }
+
+    override fun onDestroy() {
+        mainHandler.removeCallbacks(runnable)
+        sessionService.saveSession(
+            Session(
+                playersToPlayerDtoArray(), PlayerDto.toPlayerDto(currentPlayer)
+            )
+        )
+        super.onDestroy()
     }
 
     override fun onRestart() {
@@ -229,16 +276,6 @@ class InGameActivity : AppCompatActivity() {
         setPlayersFromSession(session)
         super.onRestart()
     }
-
-//        mainHandler.removeCallbacks(runnable)
-//        sessionService.saveSession(Session(players, currentPlayer))
-/*mainHandler.post(object : Runnable {
-    override fun run() {
-        runnable = this
-        sessionService.saveSession(Session(players))
-        mainHandler.postDelayed(this, 30000)
-    }
-})*/
 
     private fun initGame() {
         val startField = StartField("STA")
@@ -375,7 +412,7 @@ class InGameActivity : AppCompatActivity() {
         movePlayerBy(firstDice + secondDice)
         handleActionOnLandedField()
 
-        if(!isPurchasing) { // race condition problems arise when waiting for user to choose an option in the property purchase dialog. so this is needed
+        if (!isPurchasing) { // race condition problems arise when waiting for user to choose an option in the property purchase dialog. so this is needed
             changeTurn()
         }
     }
@@ -406,7 +443,6 @@ class InGameActivity : AppCompatActivity() {
         }
 
         alertDialog.show()
-        println("beforeIsPurchasingTrue")
         isPurchasing = true
     }
 
