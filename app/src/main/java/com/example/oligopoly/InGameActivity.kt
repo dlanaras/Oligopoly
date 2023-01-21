@@ -23,6 +23,8 @@ import com.example.oligopoly.models.*
 import com.example.oligopoly.services.SessionService
 
 class InGameActivity : AppCompatActivity() {
+    private var isPurchasing: Boolean = false
+    private var resumeGame = false
     private var mBound = false
     //private val mainHandler = Handler(Looper.getMainLooper())
 
@@ -32,6 +34,7 @@ class InGameActivity : AppCompatActivity() {
     private lateinit var currentPlayer: Player
     private lateinit var players: Array<Player>
     private lateinit var propertySets: Array<Array<Property>>
+
 
     private lateinit var teamABalanceText: TextView
     private lateinit var teamBBalanceText: TextView
@@ -53,6 +56,10 @@ class InGameActivity : AppCompatActivity() {
             val binder = service as SessionService.LocalBinder
             sessionService = binder.getService()
             mBound = true
+
+            if(resumeGame) {
+                setPlayersFromSession(sessionService.getSession()!!)
+            }
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
@@ -87,7 +94,7 @@ class InGameActivity : AppCompatActivity() {
         initGame()
 
         if (intent.getBooleanExtra("resumeGame", false)) {
-            setPlayersFromSession(sessionService.getSession())
+            resumeGame = true
         } else {
             initPlayers()
         }
@@ -117,30 +124,34 @@ class InGameActivity : AppCompatActivity() {
 
     private fun setPlayersFromSession(session: Session) {
         players = playerDtosToPlayerArray(session.players)
-
-        players[0].positionTextView = playerAPositionText
-        players[1].positionTextView = playerBPositionText
-        players[2].positionTextView = playerCPositionText
-        players[3].positionTextView = playerDPositionText
-
-        players[0].team.balanceTextView = teamABalanceText
-        players[0].team.propertiesTextView = teamAPropertiesText
-        players[1].team.balanceTextView = teamABalanceText
-        players[1].team.propertiesTextView = teamAPropertiesText
-        players[2].team.balanceTextView = teamBBalanceText
-        players[2].team.propertiesTextView = teamBPropertiesText
-        players[3].team.balanceTextView = teamBBalanceText
-        players[3].team.propertiesTextView = teamBPropertiesText
-
-        teamANameText.text = players[0].team.name
-        teamBNameText.text = players[2].name
-        teamABalanceText.text = players[0].team.balance.toString()
-        teamBBalanceText.text = players[2].team.balance.toString()
-
+        //TODO: refactor team a and team b names
         val playerA = players[0]
         val playerB = players[1]
         val playerC = players[2]
         val playerD = players[3]
+
+        playerA.positionTextView = playerAPositionText
+        playerB.positionTextView = playerBPositionText
+        playerC.positionTextView = playerCPositionText
+        playerD.positionTextView = playerDPositionText
+
+        playerC.team.balanceTextView = teamABalanceText
+        playerC.team.propertiesTextView = teamAPropertiesText
+        playerA.team.balanceTextView = teamBBalanceText
+        playerA.team.propertiesTextView = teamBPropertiesText
+
+        teamANameText.text = playerA.team.name
+        teamBNameText.text = playerC.team.name
+        teamABalanceText.text = playerA.team.balance.toString()
+        teamBBalanceText.text = playerC.team.balance.toString()
+
+        playerA.team.ownedProperties.forEach {p ->
+            addPropertyToTeam(p, playerA.team)
+        }
+
+        playerC.team.ownedProperties.forEach {p ->
+            addPropertyToTeam(p, playerC.team)
+        }
 
         playerANameText.text = playerA.name
         playerBNameText.text = playerB.name
@@ -214,7 +225,7 @@ class InGameActivity : AppCompatActivity() {
     }
 
     override fun onRestart() {
-        val session = sessionService.getSession()
+        val session = sessionService.getSession()!!
         setPlayersFromSession(session)
         super.onRestart()
     }
@@ -357,39 +368,46 @@ class InGameActivity : AppCompatActivity() {
     @Suppress("UNUSED_PARAMETER")
     @RequiresApi(Build.VERSION_CODES.O)
     fun rollDice(view: View) {
-        println(currentPlayer.name)
         val firstDice = getRandomDiceRoll()
         val secondDice = getRandomDiceRoll()
         // TODO play bad animation of dice rolling (use one of 6 dice animations twice based on rolled number)
 
         movePlayerBy(firstDice + secondDice)
         handleActionOnLandedField()
-        changeTurn()
+
+        if(!isPurchasing) { // race condition problems arise when waiting for user to choose an option in the property purchase dialog. so this is needed
+            changeTurn()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun promptPropertyPurchase(p: Property) {
+    private fun promptPropertyPurchaseAndChangeTurn(p: Property) {
         val alertDialog: AlertDialog = this.let {
             val builder = AlertDialog.Builder(it)
             builder.apply {
                 setPositiveButton(
                     "Buy"
                 ) { _, _ ->
-                    addPropertyToCurrentTeam(p)
+                    addPropertyToTeam(p, currentPlayer.team)
                     subtractBalance(currentPlayer.team, p.cost)
+
+                    isPurchasing = false
+                    changeTurn()
                 }
                 setNegativeButton(
                     "Don't"
                 ) { _, _ -> } // Do nothing
             }
 
-            builder.setMessage("${currentPlayer.name} want to purchase ${p.fieldName} for ${p.cost}?")
+            builder.setMessage("${currentPlayer.name}, want to purchase ${p.fieldName} for ${p.cost}?")
                 .setTitle("Property Purchase")
 
             builder.create()
         }
 
         alertDialog.show()
+        println("beforeIsPurchasingTrue")
+        isPurchasing = true
     }
 
     private fun showCommunityChestDialog(message: String) {
@@ -465,18 +483,18 @@ class InGameActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun addPropertyToCurrentTeam(p: Property) {
-        p.purchase(currentPlayer.team.name)
+    private fun addPropertyToTeam(p: Property, t: Team) {
+        p.purchase(t.name)
         val newPropertyText =
-            if (currentPlayer.team.propertiesTextView!!.text.toString().isEmpty()) {
+            if (t.propertiesTextView!!.text.toString().isEmpty()) {
                 p.fieldName
             } else {
                 ", ${p.fieldName}"
             }
 
-        currentPlayer.team.propertiesTextView!!.text =
-            currentPlayer.team.propertiesTextView!!.text.toString() + newPropertyText
-        currentPlayer.team.ownedProperties.add(p)
+        t.propertiesTextView!!.text =
+            t.propertiesTextView!!.text.toString() + newPropertyText
+        t.ownedProperties.add(p)
     }
 
     private fun movePlayerBy(by: Int) {
@@ -516,7 +534,7 @@ class InGameActivity : AppCompatActivity() {
                 }
             } else {
                 if (currentPlayer.team.balance >= currentProperty.cost) {
-                    promptPropertyPurchase(currentProperty)
+                    promptPropertyPurchaseAndChangeTurn(currentProperty)
                 }
             }
         } else if (currentPlayer.position is ChanceField) {
