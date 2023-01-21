@@ -558,6 +558,7 @@ class InGameActivity : AppCompatActivity() {
             Chance.ThreeSpacesForward -> {
                 chanceExplanation = "Travel three spaces forwards."
                 movePlayerBy(3)
+                handleActionOnLandedField()
             }
             Chance.StealOneHundred -> {
                 chanceExplanation = "Steal 100$ from the other team."
@@ -566,6 +567,7 @@ class InGameActivity : AppCompatActivity() {
             Chance.ThreeSpacesBack -> {
                 chanceExplanation = "Travel three spaces backwards."
                 movePlayerBy(-3)
+                handleActionOnLandedField()
             }
         }
 
