@@ -167,7 +167,7 @@ class InGameActivity : AppCompatActivity() {
 
         board.forEach { f ->
             if (f is Property) {
-                if(teamAOwnedPropertyNames.contains(f.fieldName)) {
+                if (teamAOwnedPropertyNames.contains(f.fieldName)) {
                     addPropertyToTeamAfterResumingSession(f, playerA.team)
                 } else if (teamBOwnedPropertyNames.contains(f.fieldName)) {
                     addPropertyToTeamAfterResumingSession(f, playerC.team)
@@ -647,12 +647,22 @@ class InGameActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun sendGameResultNotification(loserTeam: Team, winnerTeam: Team) {
         val notificationChannel =
-            NotificationChannel("Oligopoly", "Oligopoly", NotificationManager.IMPORTANCE_DEFAULT)
+            NotificationChannel(
+                "Oligopoly",
+                "Oligopoly",
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply { description = "Monopoly with teams" }
+
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        notificationManager.createNotificationChannel(notificationChannel)
 
         val builder = NotificationCompat.Builder(this, notificationChannel.id)
-            .setSmallIcon(R.drawable.notification_icon).setContentTitle("Oligopoly Game Results")
+            .setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle("Oligopoly Game Results")
             .setContentText("Team ${loserTeam.name} went bankrupt. Which means team ${winnerTeam.name} won!")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         with(NotificationManagerCompat.from(this)) {
             // notificationId is a unique int for each notification that you must define
