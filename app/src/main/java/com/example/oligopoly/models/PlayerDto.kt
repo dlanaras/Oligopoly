@@ -15,7 +15,7 @@ class PlayerDto(
 ) {
     companion object {
         fun toPlayer(pDto: PlayerDto): Player {
-            return Player(pDto.name, pDto.position, TeamDto.toTeam(pDto.team)!!, null, null)
+            return Player(pDto.name, pDto.position, TeamDto.toTeam(pDto.team)!!, null, null, null)
         }
 
         fun toPlayerDto(p: Player): PlayerDto {

@@ -31,6 +31,7 @@ class InGameActivity : AppCompatActivity() {
     private var resumeGame = false
     private var mBound = false
     private val mainHandler = Handler(Looper.getMainLooper())
+    private val currentPlayerPointer = " <---"
 
     private lateinit var runnable: Runnable
     private lateinit var sessionService: SessionService
@@ -156,6 +157,11 @@ class InGameActivity : AppCompatActivity() {
         val playerC = players[2]
         val playerD = players[3]
 
+        playerA.nameTextView = playerANameText
+        playerB.nameTextView = playerBNameText
+        playerC.nameTextView = playerCNameText
+        playerD.nameTextView = playerDNameText
+
         playerA.positionTextView = playerAPositionText
         playerB.positionTextView = playerBPositionText
         playerC.positionTextView = playerCPositionText
@@ -251,13 +257,41 @@ class InGameActivity : AppCompatActivity() {
         teamBBalanceText.text = teamB.balance.toString()
 
         val playerA =
-            Player(intent.getStringExtra("playerA")!!, board[0], teamA, playerAPositionText, playerAPositionColor)
+            Player(
+                intent.getStringExtra("playerA")!!,
+                board[0],
+                teamA,
+                playerAPositionText,
+                playerAPositionColor,
+                playerANameText
+            )
         val playerB =
-            Player(intent.getStringExtra("playerB")!!, board[0], teamA, playerBPositionText, playerBPositionColor)
+            Player(
+                intent.getStringExtra("playerB")!!,
+                board[0],
+                teamA,
+                playerBPositionText,
+                playerBPositionColor,
+                playerBNameText
+            )
         val playerC =
-            Player(intent.getStringExtra("playerC")!!, board[0], teamB, playerCPositionText, playerCPositionColor)
+            Player(
+                intent.getStringExtra("playerC")!!,
+                board[0],
+                teamB,
+                playerCPositionText,
+                playerCPositionColor,
+                playerCNameText
+            )
         val playerD =
-            Player(intent.getStringExtra("playerD")!!, board[0], teamB, playerDPositionText, playerDPositionColor)
+            Player(
+                intent.getStringExtra("playerD")!!,
+                board[0],
+                teamB,
+                playerDPositionText,
+                playerDPositionColor,
+                playerDNameText
+            )
 
         players = arrayOf(playerA, playerB, playerC, playerD)
 
@@ -469,7 +503,7 @@ class InGameActivity : AppCompatActivity() {
     }
 
     private fun getColorValueFromColorEnum(color: Color): Int {
-        val colorHex = when(color) {
+        val colorHex = when (color) {
             Color.Black -> "#000000"
             Color.Brown -> "#644117"
             Color.Cyan -> "#a4f4f9"
@@ -617,7 +651,11 @@ class InGameActivity : AppCompatActivity() {
 
         currentPlayer.position = board[boardIndexOfNewLocation]
         currentPlayer.positionTextView!!.text = currentPlayer.position.fieldName
-        currentPlayer.positionColorView!!.setBackgroundColor(getColorValueFromColorEnum(currentPlayer.position.color))
+        currentPlayer.positionColorView!!.setBackgroundColor(
+            getColorValueFromColorEnum(
+                currentPlayer.position.color
+            )
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -743,14 +781,23 @@ class InGameActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun changeTurn() {
         val currentPlayerIndex = players.indexOf(currentPlayer)
+
+        if (currentPlayer.nameTextView!!.text.toString().contains(currentPlayerPointer)) {
+            currentPlayer.nameTextView!!.text =
+                currentPlayer.nameTextView!!.text.toString().replace(currentPlayerPointer, "")
+        }
 
         currentPlayer = if (currentPlayerIndex < 3) {
             players[currentPlayerIndex + 1]
         } else {
             players[0]
         }
+
+        currentPlayer.nameTextView!!.text =
+            currentPlayer.nameTextView!!.text.toString() + currentPlayerPointer
     }
 
     private fun getOtherTeam(team: Team): Team {
