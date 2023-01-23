@@ -568,6 +568,14 @@ class InGameActivity : AppCompatActivity() {
         builder.create().show()
     }
 
+    private fun showBalanceTransferDialog(title: String, message: String) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+
+        builder.setMessage(message).setTitle(title)
+
+        builder.create().show()
+    }
+
     private fun getRandomDiceRoll(): Int {
         return (1..6).random()
     }
@@ -592,6 +600,10 @@ class InGameActivity : AppCompatActivity() {
         from.balanceTextView!!.text = "${from.balance}$"
         to.balanceTextView!!.text = "${to.balance}$"
 
+        val title = "Landed on ${to.name} field"
+        val message = "${currentPlayer.name} landed on a property owned by ${to.name}. Pay $amount$."
+
+        showBalanceTransferDialog(title, message)
         declareBankruptcyIfTeamIsBankrupt(from)
     }
 
