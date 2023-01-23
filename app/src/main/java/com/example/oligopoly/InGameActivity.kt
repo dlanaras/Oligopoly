@@ -59,6 +59,7 @@ class InGameActivity : AppCompatActivity() {
     private lateinit var playerBPositionColor: View
     private lateinit var playerCPositionColor: View
     private lateinit var playerDPositionColor: View
+    private lateinit var boardImage: ImageView
 
 
     private val connection = object : ServiceConnection {
@@ -117,6 +118,9 @@ class InGameActivity : AppCompatActivity() {
         playerBPositionColor = findViewById(R.id.playerBPositionColor)
         playerCPositionColor = findViewById(R.id.playerCPositionColor)
         playerDPositionColor = findViewById(R.id.playerDPositionColor)
+        boardImage = findViewById(R.id.board)
+
+        boardImage.setImageResource(R.drawable.oligopoly_board)
 
         initGame()
 
