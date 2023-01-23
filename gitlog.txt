@@ -1,0 +1,227 @@
+commit 288686309324f06fd7c0d5c037a01d858498b28b
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Mon Jan 23 14:39:22 2023 +0100
+
+    fix: pay 20$ for every property now works like intended
+
+commit 5f34ad936438700c8f274b0e621b1a82c0fdb7a4
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Mon Jan 23 14:36:10 2023 +0100
+
+    feat: added dialog for when landing on enemies property
+
+commit 284ba1649c79e45cc978a002cff3388e9e58b277
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Mon Jan 23 14:18:59 2023 +0100
+
+    style: added board and fixed in-game layout
+
+commit 632b103a31ef05d2c25d6e65d7a49a753c76d66e
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Mon Jan 23 09:50:23 2023 +0100
+
+    fix: handled invalid starting balance values causing crashes
+
+commit 97baf2e476e87728021b6d332df7434b5cc25a04
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Mon Jan 23 09:14:03 2023 +0100
+
+    fix: added validation to prevent 0 or sub 0 starting balance
+
+commit 6294997c963ed581e77a4af9b507680d7ea4d503
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Mon Jan 23 08:55:43 2023 +0100
+
+    feat: who is currently playing now indicated with a predefined string (currently: <---)
+
+commit af9d280f3ef8a8f93851646bbb67b6a5b23d08c1
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Sat Jan 21 23:32:10 2023 +0100
+
+    feat/style: added oligopoly app icon
+
+commit 531079bf6ec991214d5654014866ad191e22f4ae
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Sat Jan 21 23:17:32 2023 +0100
+
+    feat: color of current field shows up below the players position
+
+commit 3a4e2fd35f98a12f91920d0c11500af96341a66a
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Sat Jan 21 22:24:51 2023 +0100
+
+    feat: rolling dice animation now plays when rolling the dice
+
+commit 9350e3a87573350d65d183a8453cf224b7157449
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Sat Jan 21 16:09:03 2023 +0100
+
+    style: added custom icon for notification
+
+commit 5338be3831c772949bb4e458970741e825f87baa
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Sat Jan 21 16:01:17 2023 +0100
+
+    fix: sending notifications now works
+
+commit 04e80cadda0204bb237bd67a3eb56e33b1f47cd3
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Sat Jan 21 15:42:01 2023 +0100
+
+    feat/fix: session automatically gets saved every 30s and fixed owned properties being purchasable although already bought
+
+commit d96af63ab15d2b92e1865d029a493ae12341c895
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Sat Jan 21 14:00:40 2023 +0100
+
+    fix: player landed field after being moved by a chance now executes its action (purchase, pay or nothing)
+
+commit 8186facd0342e4ba22d28b51a5d9d5f87ce6cce2
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Sat Jan 21 13:50:05 2023 +0100
+
+    fix: added solution for property purchase race condition and properties now show up when resuming session
+
+commit 6e949b32ca2d2e91888b298e65a5739a0242d62c
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Sat Jan 21 13:34:22 2023 +0100
+
+    style: game settings activity switched position of team a and team b name inputs
+
+commit df8de22abab40bb5710d0656604b70bbaff468ca
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Sat Jan 21 13:33:11 2023 +0100
+
+    style: sessionActivity layout fixed
+
+commit 7f60f7f62acfbcf177b51adaf2acc1ade3bba67a
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Sat Jan 21 13:32:34 2023 +0100
+
+    feat: SessionActivity.kt implemented and working
+
+commit e2e738b4a424ce5f6d1d6f70729edd88d920a8f8
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Sat Jan 21 13:30:23 2023 +0100
+
+    fix: SessionService getSession adjusted for sessionExists to work
+
+commit fd140904935a0e513ab5c155bb4bff626acbe1ba
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Sat Jan 21 11:17:36 2023 +0100
+
+    style: change position of teamA inputs with teamB inputs because teamB starts first
+
+commit b64c89276275924407e181528b70cb4db8bc84af
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Sat Jan 21 11:15:49 2023 +0100
+
+    fix/feat: session gets saved onStop and continues onRestart
+
+commit bb565970c9624fcff8aa6d14618b4b854f511ee7
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Fri Jan 20 00:22:56 2023 +0100
+
+    fix: SessionService might be working now
+
+commit f613e90a0166a597f034f89f7376c63a122212fd
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Thu Jan 19 15:45:11 2023 +0100
+
+    feat: gameSettingsActivity sends required starting data to InGameActivity
+
+commit 10de17685f90ae7eabf6ab0d46cf049d5e5d3817
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Thu Jan 19 14:53:53 2023 +0100
+
+    feat: implemented notification
+
+commit 5550fb3655071e29a798d37c81dc97e63cfbc3b1
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Thu Jan 19 14:25:37 2023 +0100
+
+    feat: dialogs for cc chance and property purchase should work
+
+commit 8420f83f1208e9765a110a75b335d937f8ddd3dd
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Thu Jan 19 13:42:15 2023 +0100
+
+    feat: session should get saved automatically every 30s
+
+commit a21dbbd47a1d7ac51c986ad4914b3b8f4d2f1d44
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Thu Jan 19 13:29:44 2023 +0100
+
+    feat: think I implemented the session service
+
+commit 628947ff43440de11dd40f09cece5c663e662e82
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Wed Jan 18 23:20:45 2023 +0100
+
+    feat: inGameActivity functions mostly implemented also models adjusted
+
+commit d6454cb7d05d45b6a4644fdcb3164362d5d0302f
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Wed Jan 18 16:05:36 2023 +0100
+
+    style: main activity background image no stretches over background correctly
+
+commit 4ff3249f2fc714916752df75ff363ecef9457db9
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Wed Jan 18 15:57:15 2023 +0100
+
+    style: removed top bar and made in game layout
+
+commit fd71e6deffa09df3ccd994ff0f5d485b796c87d1
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Wed Jan 18 15:21:12 2023 +0100
+
+    style: done with activity settings layout (not satisfied with it)
+
+commit 16f665ccfe1829e557b998620c4a370cf8f39671
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Wed Jan 18 13:40:28 2023 +0100
+
+    style: SessionActivity.kt layout done
+
+commit e1b48909ab1716c8cdc1aa808d4b7318d749d58e
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Wed Jan 18 11:41:52 2023 +0100
+
+    style: MainActivity.kt layout done
+
+commit 806fe261367323f484de86b8ce75193da4ae1176
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Wed Jan 18 10:47:51 2023 +0100
+
+    feat: prepared activity methods and properties
+
+commit fbb62e72ae471eae31f8772fa8810dd87c0b6279
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Wed Jan 18 09:31:12 2023 +0100
+
+    feat: added sessionservice functions (not yet functional)
+
+commit 1deec84cb9a5b217abba4fa95dfaf84c7e9ae918
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Wed Jan 18 09:26:35 2023 +0100
+
+    feat: implemented Models and Interface
+
+commit e1535aca0b2b6fa09089969e99a1239b17d3f2f9
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Wed Jan 18 09:06:54 2023 +0100
+
+    feat: added Enum values
+
+commit 470188b5c7c8cb995ee1c4b6b4f5ae6f4af9920c
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Wed Jan 18 09:04:10 2023 +0100
+
+    feat: added empty classes (from class diagram)
+
+commit 6697b69b72b454222a4353641feb4a74527a1c21
+Author: dlanaras <70207362+dlanaras@users.noreply.github.com>
+Date:   Wed Jan 18 08:35:07 2023 +0100
+
+    init commit
