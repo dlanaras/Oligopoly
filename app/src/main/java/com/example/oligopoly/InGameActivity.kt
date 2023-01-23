@@ -754,11 +754,7 @@ class InGameActivity : AppCompatActivity() {
             }
             CommunityChest.PayTwentyForEveryProperty -> {
                 communityChestExplanation = "You pay 20$ for every property you own."
-                transferBalance(
-                    currentPlayer.team,
-                    getOtherTeam(currentPlayer.team),
-                    currentPlayer.team.ownedProperties.size * 20
-                )
+                subtractBalance(currentPlayer.team, 20 * currentPlayer.team.ownedProperties.size)
             }
         }
 
