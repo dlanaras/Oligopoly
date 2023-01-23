@@ -69,6 +69,9 @@ class GameSettingsActivity : AppCompatActivity() {
             return false
         }
 
-        return (startingBalanceInput.text.isNotEmpty() && startingBalanceInput.text.toString().toInt() <= 1000000)
+        val oneMillion = 1_000_000
+        val startingBalance = startingBalanceInput.text.toString().toInt()
+
+        return (startingBalanceInput.text.isNotEmpty() && startingBalance <= oneMillion && startingBalance > 0)
     }
 }
