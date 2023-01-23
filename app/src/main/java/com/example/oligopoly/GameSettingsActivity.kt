@@ -70,7 +70,14 @@ class GameSettingsActivity : AppCompatActivity() {
         }
 
         val oneMillion = 1_000_000
-        val startingBalance = startingBalanceInput.text.toString().toInt()
+        val startingBalance: Int
+        try {
+            startingBalance = startingBalanceInput.text.toString().toInt()
+        } catch (e: java.lang.NumberFormatException) {
+            println("invalid integer entered")
+            return false
+        }
+
 
         return (startingBalanceInput.text.isNotEmpty() && startingBalance <= oneMillion && startingBalance > 0)
     }
